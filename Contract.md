@@ -1,9 +1,20 @@
 Structure of a contract
 
-Contracts in Solidity are similar to classes in object-oriented languages. Each contract can contain declarations of State variables, Functions, Functions modifiers, Events, Errors, Struct Types and Enum Types.
+Contracts are similar to classes in object-oriented languages. Each contract can contain declarations of State Variables, Functions, Functiosn Modifiers, Errors, Events, Struct Type and Enum Type. 
+Furthermore contracts can inherit from other contracts.
 
-Contracts in Solidity are similar to classes in object-oriented languages. Each contract can contain declarations of State variables, Functions, Functions Modifiers, Events, Errors, Struct Types and Enum Types. Furthermore, contracts can inherit from other contracts.
+There are also special kinds of contracts called libraries and interfaces.
 
-Each contract can contain declarations of State Variables, Functions, Functions Modifiers, Events, Errors, Struct Types and Enum Types.
+State variables
+State variables are variables whose values are either permanently stored in contract storage or, alternatively temporarly stored in transient storage which is cleaned at the end of each transaction. 
 
-Contracts in Solidity are similar to classes in object-oriented 
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.0 <0.9.0;
+
+contract SimpleStorage {
+    uint storedData; // State variable
+    // ...
+}
+```
+
