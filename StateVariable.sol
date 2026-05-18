@@ -5,3 +5,4 @@ contract StateVariable {
     uint storedData;
     // ...
 }
+

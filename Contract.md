@@ -18,3 +18,5 @@ contract SimpleStorage {
 }
 ```
 
+Functions
+Functions are the executable units of code. Functions are usually defined inside a contract, but they can also be defined outside of contracts.
