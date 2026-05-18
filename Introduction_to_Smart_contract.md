@@ -83,4 +83,6 @@ contract Coin {
 }
 ```
 
-![Schéma d'un contrat](./Contract_Coin.png)
+![Schéma d'un contrat](./Coin_Contract.png)
+
+T
