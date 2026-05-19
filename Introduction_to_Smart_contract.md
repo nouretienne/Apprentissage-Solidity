@@ -85,4 +85,3 @@ contract Coin {
 
 ![Schéma d'un contrat](./Coin_Contract.png)
 
-T
