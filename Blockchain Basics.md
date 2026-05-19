@@ -9,3 +9,19 @@ A blockchain is a globally shared, transactonal database. This means that everyo
 As an example, imagine a table that lists the balances of all accounts in an electronic currency. If a transfer from one account to another is requested, the transactional nature of the database ensures that if the amount is substracted from one account, it is always added to the other account. If due to whatever reason, adding the amount to the target account is not possible, the source account is also not modified.
 
 Furthermore, a transaction is always cryptographically signed by the sender (creator). This makes it straightforward to guard access to specific modifications of the database. In the example of the electronic currency, a simple check ensures that only the person holding the keys to the account can transfer some compensation, e.g. Ether, from it. 
+
+### Blocks
+
+One major obstacle to overcome is what (in Bitcoin terms) is called a "double-spend attack": What happens if two transactions exist in the network that both want to empty an account? Only oen of the transaction can be valid, typically the one that is accepted first. The problem is that "first" is not an objective term in a peer-to-peer network.
+
+The abstract answer to this is that yo do not have to care. A globally accepted order of the transactions will be selected for you, solving the conflict. The transactions will be bundled into what is called a "block" and then they will be executed and distributed among all participating nodes. If two transactions contradict each other, the one that ends upe being second will be rejected and not become part of the block. 
+
+These blocks form a linear sequence in time, and that is where the word "blockchain" derives from. Blocks are added to the chain at regular intervals, although these intervals may be subject to change in the future. For the most up-to-date information,it is recommended to monitor the network, for example, on Etherscan.
+
+As part of the "order selection mechanism", which is called attestation, it may happen that blocks are reerted from time to time, but only at the "tip" of the chain. The more blocks are addede on top of a particular block, the less likely this block will be reverted. So it might be that your transactions are reverted and even removed from the blockchain, but the longer you wait, the less likely it will be.
+
+Note:
+Transactions are not guaranteed to be included in the next block or any specific future block, since it is not up to the submitter of a transactio, but up to the miners to determine in which block the transaction is included. 
+
+If you want to schedule future calls of your contract, you can use a smart contract automation tool or an oracle service.
+
