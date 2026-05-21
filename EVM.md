@@ -77,3 +77,36 @@ As already said, the called contract (which can be the same as the caller) will 
 Calls are **limited** to a depth of 1024, which means that for more complex operations, loops should be preferred over recursive calls. Furthermore, only 63/64th of the gas can be forwarded in a message call, which causes a depth limit of a little less than 1000 in practice.
 
 ### Delegatedcall and Libraries
+
+There exists a special variant of a message call, named **delegatecall** which is identical to a message call apart from the fact that the code at the target address is executed in the context (i.e. at the address) of the calling contract and ```msg.sender``` and ```msg.value``` do not change their values.
+
+This means that a contract can dynamically load code from a different address at runtime. Storage, current address and balance still refer to the calling contract, only the code is taken from the called address.
+
+This makes it possible to implement the "library" feature in Solidity: Reusable library code that can be applied to a contract's storage, e.g. in order to implement a complex data structure.
+
+### Logs 
+
+It is possible to store data in a specially indexed data structure that maps all the way up to the block level. This feature called **logs** is used by Solidity in order to implement events. Contracts cannot access log data after it has been created, but they can be efficiently accessed from outside the blockchain. Since some part of the log data is stored in bloom filters, it is possible to search for this data in an efficient and cryptographically secure way, so network peers that do not download the whole blockchain (so-called "light clients") can still find theses logs.
+
+
+### Create
+
+Contracts can even create other contracts using a special opcode (i.e. they do not simply call the zero address as a transaction would). The only difference between these **create calls** and normal message calls is that the payload data is executed and the result stored as code and the caller / creator receives the address of the new contract on the stack.
+
+### Deactivate and Self-destruct
+
+The only way to remove code from the blockchain is when a contract at that address performs the ```selfdestruct``` operation. The remaining Ether stored at that address is sent to a designated target and then the storage and code is removed from the state. Removing the contract in theory sounds like a good idea, but it is potentially dangerous, as if someone sends Ether to removed contracts, the Ether is forever lost.
+
+### Warning
+
+From ```EVM >= Cancun``` onwards, ```selfdestruct``` will **only** send all Ether in the account to the given recipient and not destroy the contract. However, when ```selfdestruct``` is called in the same transaction that creates the contract calling it, the behaviour of ```selfdestruct``` before Cancun hardfork (i.e., ```EVM <= Shanghai```) is preserved and will destroy the current contratct, deleting any data, including storage keys, code and the account itself. See ```EIP-6780``` for more details.
+
+The new behaviour is the result of a network-wide change that affects all contracts present on the Ethereum mainnet and testnets. It is important to not that this change is dependent on the EVM version of the chain on which the contract is deployed. The ```--evm-version``` setting used when compiling the contract has no bearing on it.
+
+Also, note that the ```selfdestruct``` opcode has been deprecated in Solidity version 0.8.18, as recommeded by ```EIP-6049```. The deprecation is still in effect and the compiler will still emit warnings on its use. Any use in newly deployed contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might further reduce the functionality of the opcode.
+
+### Note
+
+Even if a contract's code does not contain a call to ```selfdestruct```, it can still perform that operation using ```delegatecall``` or ```callcode```.
+
+If you want to deactivate your contracts, you should instead **disable** them by changing some internal state which causes all functions to revert. This makes it impossible to use the contract, as it returns Ether immediately.
