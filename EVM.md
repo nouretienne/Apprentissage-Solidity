@@ -110,3 +110,9 @@ Also, note that the ```selfdestruct``` opcode has been deprecated in Solidity ve
 Even if a contract's code does not contain a call to ```selfdestruct```, it can still perform that operation using ```delegatecall``` or ```callcode```.
 
 If you want to deactivate your contracts, you should instead **disable** them by changing some internal state which causes all functions to revert. This makes it impossible to use the contract, as it returns Ether immediately.
+
+### Precompiled Contracts
+
+There is a small set of contract addresses that are special: The address range between ```1``` and (including) ```0x0a``` contains "precompiled contracts" that can be called as any other contract but their behavior (and their gas consumption) is not defined by EVM code stored at that address (they do not contain code) but instead is implemented in the EVM execution environment itself.
+
+Different EVM-compatible chains might use a different set of precompiled contracts. It might also be possible that new precompiled contracts are added to the Ethereum main chain in the future, but you can reasonably expect them to always be in the range between ```1``` and ```0xffff``` (inclusive).
